@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chainSuperMarket", "chainSuperMarket\chainSuperMarket.csproj", "{50E10B03-7374-4651-9AC2-78B520392A04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperMarket", "SuperMarket\SuperMarket.csproj", "{50E10B03-7374-4651-9AC2-78B520392A04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperMarket.DTO", "DTO\SuperMarket.DTO.csproj", "{6D973814-03EB-4A41-AD7C-9F7B1D54166B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{50E10B03-7374-4651-9AC2-78B520392A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50E10B03-7374-4651-9AC2-78B520392A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50E10B03-7374-4651-9AC2-78B520392A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D973814-03EB-4A41-AD7C-9F7B1D54166B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D973814-03EB-4A41-AD7C-9F7B1D54166B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D973814-03EB-4A41-AD7C-9F7B1D54166B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D973814-03EB-4A41-AD7C-9F7B1D54166B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

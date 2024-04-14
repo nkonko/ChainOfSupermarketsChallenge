@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace chainSuperMarket
+﻿namespace SuperMarket.DTO
 {
     public class ProductList
     {
