@@ -1,21 +1,29 @@
 ﻿using SuperMarket.DTO;
-using SuperMarket.Services.Database.Imp;
+using SuperMarket.Services.Database;
 
 namespace SuperMarket.Services
 {
     public class Checkout : ICheckout
     {
         private List<Product> Products = new List<Product>();
+        private List<Product> ProductsSelected = new List<Product>();
         private readonly ITotalProcessor totalProcessor;
+        private readonly IProductDataSource productDataSource;
 
-        public Checkout(ITotalProcessor totalProcessor)
+        public Checkout(ITotalProcessor totalProcessor, IProductDataSource productDataSource)
         {
             this.totalProcessor = totalProcessor;
+            this.productDataSource = productDataSource;
         }
 
         public Product? Scan(string itemCode)
         {
-            var product = GetProductByCode(itemCode);
+            if (!Products.Any())
+            {
+                Products = productDataSource.GetAvailableProducts();
+            }
+
+            var product = Products.FirstOrDefault(x => x.Code == itemCode);
 
             if (product != null)
             {
@@ -25,40 +33,23 @@ namespace SuperMarket.Services
             return null;
         }
 
-        private Product? GetProductByCode(string itemCode)
-        {
-            var products = GetAvailableProducts();
-
-            if (products != null)
-            {
-                return products.FirstOrDefault(x => x.Code == itemCode);
-            }
-
-            return null;
-        }
-
-        private List<Product>? GetAvailableProducts()
-        {
-            return MockReader.MockedData!.Products;
-        }
-
         public void InsertOnCart(Product product, int quantity)
         {
-            if (Products.Any() && Products.Any(x => x.Code == product.Code))
+            if (ProductsSelected.Any() && ProductsSelected.Any(x => x.Code == product.Code))
             {
-                var prod = Products.FirstOrDefault(x => x.Code == product.Code);
+                var prod = ProductsSelected.FirstOrDefault(x => x.Code == product.Code);
                 prod!.Quantity += quantity;
             }
             else
             {
                 product.Quantity = quantity;
-                Products.Add(product);
+                ProductsSelected.Add(product);
             }
         }
 
         public Invoice GetTotal()
         {
-            return this.totalProcessor.Calculate(Products);
+            return this.totalProcessor.Calculate(ProductsSelected);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace SuperMarket.Services.Database.Imp
 
                 if (MockedData == null)
                 {
-                    Console.WriteLine("Mock is empty please fix and restart");
+                    throw new Exception("Mock is empty please fix and restart");
                 }
             }
             catch (FileNotFoundException)

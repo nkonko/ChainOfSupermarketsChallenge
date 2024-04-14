@@ -12,11 +12,12 @@ public class Program
     static void Main(string[] args)
     {
         var serviceProvider = new ServiceCollection()
-            .AddTransient<ICheckout, Checkout>()
             .AddTransient<IConsoleWrapper, ConsoleWrapper>()
-            .AddTransient<IUserInterface, UserInterface>()
-            .AddTransient<ITotalProcessor, TotalProcessor>()
+            .AddTransient<IProductDataSource, MockDatasource>()
             .AddTransient<IMockReader, MockReader>()
+            .AddTransient<IUserInterface, UserInterface>()
+            .AddTransient<ICheckout, Checkout>()
+            .AddTransient<ITotalProcessor, TotalProcessor>()
             .BuildServiceProvider();
 
         var config = GetConfiguration();

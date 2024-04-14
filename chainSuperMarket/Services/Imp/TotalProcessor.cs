@@ -1,9 +1,23 @@
 ﻿using SuperMarket.DTO;
+using SuperMarket.Services.Strategy;
+using SuperMarket.Services.Strategy.Imp;
 
 namespace SuperMarket.Services
 {
     public class TotalProcessor : ITotalProcessor
     {
+        private readonly Dictionary<string, IPriceCalculationStrategy> strategies;
+
+        public TotalProcessor()
+        {
+            strategies = new Dictionary<string, IPriceCalculationStrategy>
+            {
+                { "GR1", new BuyOneGetOneStrategy() },
+                { "SR1", new BerryPriceStrategy() },
+                { "CF1", new CoffeePriceStrategy() }
+            };
+        }
+
         public Invoice Calculate(List<Product> products)
         {
             var invoice = new Invoice();
@@ -13,25 +27,14 @@ namespace SuperMarket.Services
                 var detail = new Detail();
                 detail.Product = product;
 
-                switch (product.Code)
+                if (strategies.ContainsKey(product.Code))
                 {
-                    case "GR1":
-                        if (product.Quantity % 2 != 0)
-                        {
-                            product.Quantity++;
-                        }
-
-                        detail.SubTotal = (product.Quantity / 2) * product.Price;
-                        break;
-                    case "SR1":
-                        detail.SubTotal = product.Quantity >= 3 ? product.Quantity * 4.50m : product.Quantity * product.Price;
-                        break;
-                    case "CF1":
-                        detail.SubTotal = product.Quantity >= 3 ? Math.Round(product.Quantity * ((2m/3) * product.Price),2) : product.Quantity * product.Price;
-                        break;
-                    default:
-                        detail.SubTotal = product.Quantity * product.Price;
-                        break;
+                    var strategy = strategies[product.Code];
+                    detail.SubTotal = strategy.CalculateSubTotal(product);
+                }
+                else
+                {
+                    detail.SubTotal = product.Quantity * product.Price;
                 }
 
                 invoice.Details.Add(detail);

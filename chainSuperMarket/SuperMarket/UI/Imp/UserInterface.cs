@@ -28,10 +28,12 @@ namespace SuperMarket.UI.Imp
             do
             {
                 input = GetNonEmptyInput(string.Format(UIResources.EmptyInputMessage, name, ExitCommand));
+
                 if (input.ToUpper() != ExitCommand)
                 {
                     ProcessUserInput(name!, input);
                 }
+
             } while (input.ToUpper() != ExitCommand);
 
             DisplayInvoice();
@@ -83,15 +85,18 @@ namespace SuperMarket.UI.Imp
 
             this.consoleWrapper.Clear();
 
-            foreach (var item in invoice.Details)
+            if (invoice != null && invoice.Details != null)
             {
-                this.consoleWrapper.WriteLine(string.Format(UIResources.SubTotal,
-                                                item.Product.Name,
-                                                item.Product.Quantity,
-                                                item.SubTotal));
-            }
+                foreach (var item in invoice.Details)
+                {
+                    this.consoleWrapper.WriteLine(string.Format(UIResources.SubTotal,
+                                                    item.Product.Name,
+                                                    item.Product.Quantity,
+                                                    item.SubTotal));
+                }
 
-            this.consoleWrapper.WriteLine(string.Format(UIResources.Total, invoice.Total));
+                this.consoleWrapper.WriteLine(string.Format(UIResources.Total, invoice.Total));
+            }
         }
     }
 }
