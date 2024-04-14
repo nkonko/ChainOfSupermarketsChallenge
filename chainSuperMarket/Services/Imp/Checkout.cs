@@ -10,6 +10,8 @@ namespace SuperMarket.Services
         private readonly ITotalProcessor totalProcessor;
         private readonly IProductDataSource productDataSource;
 
+        public IReadOnlyList<Product> SelectedProducts => ProductsSelected.AsReadOnly(); /// Added Only For Testing
+
         public Checkout(ITotalProcessor totalProcessor, IProductDataSource productDataSource)
         {
             this.totalProcessor = totalProcessor;

@@ -1,6 +1,5 @@
 ﻿using SuperMarket.DTO;
 using SuperMarket.Services.Strategy;
-using SuperMarket.Services.Strategy.Imp;
 
 namespace SuperMarket.Services
 {
@@ -8,14 +7,9 @@ namespace SuperMarket.Services
     {
         private readonly Dictionary<string, IPriceCalculationStrategy> strategies;
 
-        public TotalProcessor()
+        public TotalProcessor(Dictionary<string, IPriceCalculationStrategy> strategies)
         {
-            strategies = new Dictionary<string, IPriceCalculationStrategy>
-            {
-                { "GR1", new BuyOneGetOneStrategy() },
-                { "SR1", new BerryPriceStrategy() },
-                { "CF1", new CoffeePriceStrategy() }
-            };
+            this.strategies = strategies;
         }
 
         public Invoice Calculate(List<Product> products)
