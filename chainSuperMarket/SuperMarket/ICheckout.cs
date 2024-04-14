@@ -8,6 +8,6 @@ namespace chainSuperMarket
 
         void InsertOnCart(Product product, int quantity);
 
-        void GetTotal();
+        Invoice GetTotal();
     }
 }

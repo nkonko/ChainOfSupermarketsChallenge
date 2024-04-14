@@ -34,13 +34,22 @@ namespace SuperMarket.UI.Imp
                 }
                 else
                 {
-                    input = GetInput($"\n Empty input, please {name} type a product code or 'EXIT' to stop \n");
+                    input = GetInput($"\n Empty input or wrong code, please {name} type a valid product code or 'EXIT' to stop \n");
                 }
 
-
+                Console.Clear();
             } while (input.ToUpper() != "EXIT");
 
-            checkout.GetTotal();
+            var invoice = checkout.GetTotal();
+
+            Console.Clear();
+
+            foreach (var item in invoice.Details)
+            {
+                Console.WriteLine($"Product: {item.Product.Name}, Quantity: {item.Product.Quantity}, Sub Total: {item.SubTotal}");
+            }
+
+            Console.WriteLine($"\n Total: {invoice.Total}");
         }
 
 

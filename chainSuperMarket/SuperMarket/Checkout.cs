@@ -5,6 +5,8 @@ using System.Linq;
 
 namespace chainSuperMarket
 {
+    ///Separar la logica de mostrar mensajes de la clase de negocio
+
     public class Checkout : ICheckout
     {
         private List<Product> Products = new List<Product>();
@@ -43,7 +45,7 @@ namespace chainSuperMarket
                 return product;
             }
 
-            throw new Exception("Database is empty");
+            return null;
         }
 
         private List<Product>? GetAvailableProducts()
@@ -65,18 +67,9 @@ namespace chainSuperMarket
             }
         }
 
-        public void GetTotal()
+        public Invoice GetTotal()
         {
-            Console.Clear();
-
-            var invoice = this.totalProcessor.Calculate(Products);
-
-            foreach (var item in invoice.Details)
-            {
-                Console.WriteLine($"Product: {item.Product.Name}, Quantity: {item.Product.Quantity}, Sub Total: {item.SubTotal}");
-            }
-
-            Console.WriteLine($"\n Total: {invoice.Total}");
+            return this.totalProcessor.Calculate(Products);
         }
     }
 }
