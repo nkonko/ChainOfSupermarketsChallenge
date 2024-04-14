@@ -1,6 +1,6 @@
 ﻿using SuperMarket.DTO;
 
-namespace chainSuperMarket
+namespace SuperMarket.Services
 {
     public interface ICheckout
     {

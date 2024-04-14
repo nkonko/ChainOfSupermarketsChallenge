@@ -1,7 +1,6 @@
 ﻿using SuperMarket.DTO;
-using System.Collections.Generic;
 
-namespace chainSuperMarket
+namespace SuperMarket.Services
 {
     public interface ITotalProcessor
     {

@@ -1,7 +1,7 @@
-﻿namespace chainSuperMarket.UI
+﻿namespace SuperMarket.UI
 {
     public interface IUserInterface
     {
-        void PromptUserMenu(ICheckout checkout);
+        void PromptUserMenu();
     }
 }

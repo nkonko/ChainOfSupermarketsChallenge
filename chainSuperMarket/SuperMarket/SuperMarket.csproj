@@ -10,9 +10,19 @@
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json.schemastore.org/azure-iot-edge-deployment-template-4.0.json" /></VisualStudio></ProjectExtensions>
 
   <ItemGroup>
+    <Compile Remove="Database\**" />
+    <EmbeddedResource Remove="Database\**" />
+    <None Remove="Database\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Cart.cs" />
+    <Compile Remove="Checkout.cs" />
     <Compile Remove="DiscountType.cs" />
+    <Compile Remove="ICheckout.cs" />
+    <Compile Remove="ITotalProcessor.cs" />
     <Compile Remove="PricingRule.cs" />
+    <Compile Remove="TotalProcessor.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,13 +35,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DTO\SuperMarket.DTO.csproj" />
+    <ProjectReference Include="..\Services\SuperMarket.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Database\mockedProducts.json">
+    <None Update="mockedProducts.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

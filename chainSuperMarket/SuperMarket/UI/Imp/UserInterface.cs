@@ -1,73 +1,97 @@
 ﻿using System;
-using chainSuperMarket;
-using chainSuperMarket.UI;
+using SuperMarket.Services;
 
 namespace SuperMarket.UI.Imp
 {
     public class UserInterface : IUserInterface
     {
-        public void PromptUserMenu(ICheckout checkout)
+        private const string ExitCommand = "EXIT";
+
+        private readonly ICheckout checkout;
+        private readonly IConsoleWrapper consoleWrapper;
+
+        public UserInterface(ICheckout checkout, IConsoleWrapper consoleWrapper)
         {
-            Console.WriteLine("Please write your name:");
-            var name = Console.ReadLine();
-            Console.WriteLine($"Welcome {name} \n");
-
-            Console.WriteLine("Start typing product code and confirm with enter, or type 'EXIT' to stop \n");
-            var input = GetInput($"\n Empty input, please {name} type a product code or 'EXIT' to stop \n");
-
-            do
-            {
-                var product = checkout.Scan(input.ToUpper());
-
-                if (product != null && !string.IsNullOrEmpty(product.Name))
-                {
-                    int quantity;
-                    do
-                    {
-                        Console.WriteLine($"You have selected: {product.Name}, Quantity?: ");
-                    } while (!int.TryParse(Console.ReadLine(), out quantity) || quantity <= 0);
-
-                    checkout.InsertOnCart(product, quantity);
-
-                    Console.WriteLine("Enter new product code, or type 'EXIT' to stop \n");
-                    input = GetInput($"\n Empty input, please {name} type a product code or 'EXIT' to stop \n");
-                }
-                else
-                {
-                    input = GetInput($"\n Empty input or wrong code, please {name} type a valid product code or 'EXIT' to stop \n");
-                }
-
-                Console.Clear();
-            } while (input.ToUpper() != "EXIT");
-
-            var invoice = checkout.GetTotal();
-
-            Console.Clear();
-
-            foreach (var item in invoice.Details)
-            {
-                Console.WriteLine($"Product: {item.Product.Name}, Quantity: {item.Product.Quantity}, Sub Total: {item.SubTotal}");
-            }
-
-            Console.WriteLine($"\n Total: {invoice.Total}");
+            this.checkout = checkout;
+            this.consoleWrapper = consoleWrapper;
         }
 
-
-        private string GetInput(string message)
+        public void PromptUserMenu()
         {
-            var input = Console.ReadLine();
+            this.consoleWrapper.WriteLine(UIResources.WriteYourName);
+            var name = this.consoleWrapper.ReadLine();
+            this.consoleWrapper.Clear();
+            this.consoleWrapper.WriteLine(string.Format(UIResources.WelcomeMessage, name));
+            this.consoleWrapper.WriteLine(string.Format(UIResources.StartMessage, ExitCommand));
+
+            string input;
+            do
+            {
+                input = GetNonEmptyInput(string.Format(UIResources.EmptyInputMessage, name, ExitCommand));
+                if (input.ToUpper() != ExitCommand)
+                {
+                    ProcessUserInput(name!, input);
+                }
+            } while (input.ToUpper() != ExitCommand);
+
+            DisplayInvoice();
+        }
+
+        private void ProcessUserInput(string name, string input)
+        {
+            var product = this.checkout.Scan(input.ToUpper());
+
+            if (product == null)
+            {
+                this.consoleWrapper.WriteLine(string.Format(UIResources.WrongCode, name, ExitCommand));
+            }
+
+            if (product != null && !string.IsNullOrEmpty(product.Name))
+            {
+                int quantity;
+                do
+                {
+                    this.consoleWrapper.WriteLine(string.Format(UIResources.ProductSelected, product.Name));
+                } while (!int.TryParse(this.consoleWrapper.ReadLine(), out quantity) || quantity <= 0);
+
+                this.checkout.InsertOnCart(product, quantity);
+                this.consoleWrapper.Clear();
+                this.consoleWrapper.WriteLine(string.Format(UIResources.ProductInserted, ExitCommand));
+            }
+        }
+
+        private string GetNonEmptyInput(string message)
+        {
+            var input = this.consoleWrapper.ReadLine();
 
             do
             {
                 if (string.IsNullOrEmpty(input))
                 {
-                    Console.WriteLine(message);
-                    input = Console.ReadLine();
+                    this.consoleWrapper.WriteLine(message);
+                    input = this.consoleWrapper.ReadLine();
                 }
 
             } while (string.IsNullOrEmpty(input));
 
             return input;
+        }
+
+        private void DisplayInvoice()
+        {
+            var invoice = this.checkout.GetTotal();
+
+            this.consoleWrapper.Clear();
+
+            foreach (var item in invoice.Details)
+            {
+                this.consoleWrapper.WriteLine(string.Format(UIResources.SubTotal,
+                                                item.Product.Name,
+                                                item.Product.Quantity,
+                                                item.SubTotal));
+            }
+
+            this.consoleWrapper.WriteLine(string.Format(UIResources.Total, invoice.Total));
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using SuperMarket.DTO;
-using System.Collections.Generic;
 
-namespace chainSuperMarket
+namespace SuperMarket.Services
 {
     public class TotalProcessor : ITotalProcessor
     {
@@ -28,7 +27,7 @@ namespace chainSuperMarket
                         detail.SubTotal = product.Quantity >= 3 ? product.Quantity * 4.50m : product.Quantity * product.Price;
                         break;
                     case "CF1":
-                        detail.SubTotal = product.Quantity >= 3 ? product.Quantity * ((2/3) * product.Price) : product.Quantity * product.Price;
+                        detail.SubTotal = product.Quantity >= 3 ? Math.Round(product.Quantity * ((2m/3) * product.Price),2) : product.Quantity * product.Price;
                         break;
                     default:
                         detail.SubTotal = product.Quantity * product.Price;

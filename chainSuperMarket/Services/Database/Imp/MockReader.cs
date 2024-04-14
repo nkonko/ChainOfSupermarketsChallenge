@@ -1,27 +1,29 @@
-﻿using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SuperMarket.DTO;
-using System;
-using System.IO;
 
-namespace chainSuperMarket.Database.Imp
+namespace SuperMarket.Services.Database.Imp
 {
     public class MockReader : IMockReader
     {
-        public ProductList? PopulateMockedData(IConfiguration config)
+        public static ProductList? MockedData { get; set; }
+
+        public void PopulateMockedData(string jsonPath)
         {
             try
             {
-                var jsonPath = config["JsonFilePath"];
-
                 if (jsonPath != null)
                 {
                     var jsonText = File.ReadAllText(jsonPath);
-                    return JsonConvert.DeserializeObject<ProductList>(jsonText);
+                    MockedData = JsonConvert.DeserializeObject<ProductList>(jsonText);
                 }
                 else
                 {
                     Console.WriteLine("Error: JsonFilePath not specified in appsettings.json");
+                }
+
+                if (MockedData == null)
+                {
+                    Console.WriteLine("Mock is empty please fix and restart");
                 }
             }
             catch (FileNotFoundException)
@@ -36,8 +38,6 @@ namespace chainSuperMarket.Database.Imp
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
-
-            return null;
         }
     }
 }

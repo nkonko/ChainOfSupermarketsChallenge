@@ -1,12 +1,8 @@
 ﻿using SuperMarket.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using SuperMarket.Services.Database.Imp;
 
-namespace chainSuperMarket
+namespace SuperMarket.Services
 {
-    ///Separar la logica de mostrar mensajes de la clase de negocio
-
     public class Checkout : ICheckout
     {
         private List<Product> Products = new List<Product>();
@@ -35,14 +31,7 @@ namespace chainSuperMarket
 
             if (products != null)
             {
-                var product = products.FirstOrDefault(x => x.Code == itemCode);
-
-                if (product == null)
-                {
-                    Console.WriteLine("Invalid code or product not available try with other code \n");
-                }
-
-                return product;
+                return products.FirstOrDefault(x => x.Code == itemCode);
             }
 
             return null;
@@ -50,7 +39,7 @@ namespace chainSuperMarket
 
         private List<Product>? GetAvailableProducts()
         {
-            return Program.MockedData!.Products;
+            return MockReader.MockedData!.Products;
         }
 
         public void InsertOnCart(Product product, int quantity)
